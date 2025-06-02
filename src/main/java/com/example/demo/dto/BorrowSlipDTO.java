@@ -1,10 +1,6 @@
 package com.example.demo.dto;
 
-import jakarta.persistence.Column;
-
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Date;
 
 public class BorrowSlipDTO {
     private String id;
@@ -92,14 +88,6 @@ public class BorrowSlipDTO {
 
     public void setDueDate(Instant dueDate) {
         this.dueDate = dueDate;
-    }
-
-    public LocalDate getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
     }
 
     public String getStatus() {

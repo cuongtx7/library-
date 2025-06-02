@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
@@ -17,11 +18,11 @@ public class BorrowSlip extends BaseEntity {
     @Column(name = "librarian_id")
     private String librarianId;
     @Column(name = "borrowDate")
-    private java.time.LocalDate borrowDate;
+    private Instant borrowDate;
     @Column(name = "due_date")
-    private java.time.LocalDate dueDate;
+    private Instant dueDate;
     @Column(name = "return_date")
-    private java.time.LocalDate returnDate;
+    private Instant returnDate;
     @Column(name = "status")
     private String status;
     @Column(name = "fine_amount")
@@ -53,27 +54,27 @@ public class BorrowSlip extends BaseEntity {
         this.librarianId = librarianId;
     }
 
-    public LocalDate getBorrowDate() {
+    public Instant getBorrowDate() {
         return borrowDate;
     }
 
-    public void setBorrowDate(LocalDate borrowDate) {
+    public void setBorrowDate(Instant borrowDate) {
         this.borrowDate = borrowDate;
     }
 
-    public LocalDate getDueDate() {
+    public Instant getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(Instant dueDate) {
         this.dueDate = dueDate;
     }
 
-    public LocalDate getReturnDate() {
+    public Instant getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(LocalDate returnDate) {
+    public void setReturnDate(Instant returnDate) {
         this.returnDate = returnDate;
     }
 

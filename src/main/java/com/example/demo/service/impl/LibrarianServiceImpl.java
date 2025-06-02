@@ -40,9 +40,9 @@ public class LibrarianServiceImpl implements LibrarianService {
         userDTO.setPhone(librarianDTO.getPhoneNumber());
         userDTO.setUserName(librarianDTO.getUsername());
         List<Librarian> list = this.listLibrarian(userDTO);
-        if (!list.isEmpty() || list != null) {
+        if (!list.isEmpty()) {
             Optional<LibrarianDTO> librarianDTO1 = this.findOne(librarianDTO.getId());
-            if (librarianDTO1.isPresent()) {
+            if (!librarianDTO1.isPresent()) {
                 throw new RuntimeException("khong có dữ liệu");
             } else {
                 librarianDTO.setLastModifiedDate(Instant.now());
@@ -80,7 +80,7 @@ public class LibrarianServiceImpl implements LibrarianService {
         queryString.append("SELECT * FROM LIBRARIAN c WHERE 1=1 ");
 
         if (userDTO.getUserName() != null) {
-            queryString.append(" AND c.user_name = :username");
+            queryString.append(" AND c.username = :username");
         }
         if (userDTO.getEmail() != null) {
             queryString.append(" AND c.email = :email");
