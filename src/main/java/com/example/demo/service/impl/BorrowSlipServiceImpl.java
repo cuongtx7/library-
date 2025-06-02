@@ -8,6 +8,8 @@ import com.example.demo.service.BookService;
 import com.example.demo.service.BorrowSlipService;
 import com.example.demo.service.LibrarianService;
 import com.example.demo.service.MemberService;
+import com.example.demo.service.job.Quartz;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class BorrowSlipServiceImpl implements BorrowSlipService {
@@ -31,6 +32,8 @@ public class BorrowSlipServiceImpl implements BorrowSlipService {
     private BorrowSlipMapper borrowSlipMapper;
     @Autowired
     private BorrowSlipRepository borrowSlipRepository;
+    @Autowired
+    private Scheduler scheduler;
 
 
     @Override
@@ -57,6 +60,7 @@ public class BorrowSlipServiceImpl implements BorrowSlipService {
             BorrowSlip borrowSlip = borrowSlipMapper.toEntity(borrowSlipDTO);
             borrowSlip.setCreatedDate(Instant.now());
             borrowSlip = borrowSlipRepository.save(borrowSlip);
+            scheduleOverdueUpdateJob(borrowSlip);
             return borrowSlipMapper.toDto(borrowSlip);
         } else {
             BorrowSlip borrowSlip = borrowSlipMapper.toEntity(borrowSlipDTO);
@@ -96,5 +100,23 @@ public class BorrowSlipServiceImpl implements BorrowSlipService {
         }
 
         return String.format("Slip_%03d", nextNum);
+    }
+
+    public void scheduleOverdueUpdateJob(BorrowSlip borrowSlip) {
+        JobDetail jobDetail = JobBuilder.newJob(Quartz.class)
+                .withIdentity("overdueJob_" + borrowSlip.getId(), "borrowSlips")
+                .usingJobData("borrowSlipId", borrowSlip.getId())
+                .build();
+
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity("overdueTrigger_" + borrowSlip.getId(), "borrowSlips")
+                .startAt(Date.from(borrowSlip.getDueDate()))
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withMisfireHandlingInstructionFireNow())
+                .build();
+        try {
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            throw new RuntimeException("Lỗi lập lịch Quartz", e);
+        }
     }
 }
