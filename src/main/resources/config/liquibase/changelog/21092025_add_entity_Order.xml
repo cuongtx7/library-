@@ -11,20 +11,17 @@
     <!-- Added the entity ParamsInit. -->
     <changeSet id="21092025" author="cuongtx">
         <!--        _added_entity_category-->
-        <createTable tableName="order"
+        <createTable tableName="order_table"
                      remarks="This entity for storing the configuration of script with id equals id of this entity">
             <column name="id" type="varchar(60)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="cid" type="varchar(60)">
+
+            <column name="customer_id" type="varchar(255)">
                 <constraints nullable="true"/>
             </column>
 
-            <column name="id_customer" type="varchar(255)">
-                <constraints nullable="true"/>
-            </column>
-
-            <column name="id_account" type="varchar(50)">
+            <column name="account_id" type="varchar(50)">
                 <constraints nullable="true"/>
             </column>
 
@@ -36,7 +33,7 @@
                 <constraints nullable="true"/>
             </column>
 
-            <column name="total_amount" type="float">
+            <column name="payment_amount" type="float">
                 <constraints nullable="true"/>
             </column>
 
@@ -48,27 +45,9 @@
                 <constraints nullable="true"/>
             </column>
 
-            <column name="discount" type="varchar(50)">
+            <column name="paid_amount" type="float">
                 <constraints nullable="true"/>
             </column>
-
-
-
-
-
-            <column name="note" type="varchar(500)">
-                <constraints nullable="true"/>
-            </column>
-
-
-            <column name="note" type="varchar(500)">
-                <constraints nullable="true"/>
-            </column>
-
-            <column name="note" type="varchar(500)">
-                <constraints nullable="true"/>
-            </column>
-
 
             <column name="created_by" type="varchar(60)">
                 <constraints nullable="true"/>
@@ -86,15 +65,11 @@
                 <constraints nullable="true"/>
             </column>
         </createTable>
-        <createIndex indexName="id" tableName="customer">
+        <createIndex indexName="id" tableName="order_table">
             <column name="id"/>
         </createIndex>
 
-        <createIndex indexName="email" tableName="customer">
-            <column name="email"/>
-        </createIndex>
-
-        <createIndex indexName="created_date" tableName="customer">
+        <createIndex indexName="created_date" tableName="order_table">
             <column name="created_date"/>
         </createIndex>
 

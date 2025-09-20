@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="autoIncrement" value="true"/>
+
+    <!-- Added the entity ParamsInit. -->
+    <changeSet id="20200625200152-1" author="cuongtx">
+        <!--        _added_entity_User-->
+        <createTable tableName="account"
+                     remarks="This entity for storing the configuration of script with id equals id of this entity">
+            <column name="id" type="varchar(60)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(60)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="password" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="role" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="birth_day" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="address" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="phone" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="email" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="active" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="created_by" type="varchar(60)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="created_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_modified_date" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="last_modified_by" type="varchar(60)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createIndex indexName="id" tableName="account">
+            <column name="id"/>
+        </createIndex>
+
+        <createIndex indexName="username" tableName="account">
+            <column name="username"/>
+        </createIndex>
+        <createIndex indexName="email" tableName="account">
+            <column name="email"/>
+        </createIndex>
+
+    </changeSet>
+</databaseChangeLog>
+
