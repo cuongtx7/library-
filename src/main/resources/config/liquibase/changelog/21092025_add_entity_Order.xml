@@ -17,7 +17,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
-            <column name="customer_id" type="varchar(255)">
+            <column name="customer_id" type="varchar(60)">
                 <constraints nullable="true"/>
             </column>
 
@@ -72,7 +72,14 @@
         <createIndex indexName="created_date" tableName="order_table">
             <column name="created_date"/>
         </createIndex>
-
+        <addForeignKeyConstraint
+                baseTableName="order_table"
+                baseColumnNames="customer_id"
+                constraintName="customwwer"
+                referencedTableName="customer"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
     </changeSet>
+
 </databaseChangeLog>
 

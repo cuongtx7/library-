@@ -45,5 +45,6 @@
             <column name="id"/>
         </createIndex>
     </changeSet>
+
 </databaseChangeLog>
 

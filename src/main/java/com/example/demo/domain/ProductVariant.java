@@ -3,84 +3,59 @@ package com.example.demo.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Nationalized;
 
+import java.math.BigDecimal;
+
+@Getter
+@Setter
 @Entity
-@Table(name = "product_variant")
-public class ProductVariant extends AbstractAuditingEntity {
-    @Column(name = "product_id", length = 60)
-    private String productId;
+@Table(name = "productVariant")
+public class ProductVariant extends AbstractAuditingEntity{
+    @NotNull
+    @Column(name = "id_variant", nullable = false, length = 10)
+    private String idVariant;
 
-    @Column(name = "product_code", length = 60)
+    @Size(max = 10)
+    @NotNull
+    @Column(name = "id_product", nullable = false, length = 10)
+    private String idProduct;
+
+    @Size(max = 50)
+    @NotNull
+    @Column(name = "product_code", nullable = false, length = 50)
     private String productCode;
 
-    @Column(name = "size", length = 60)
+    @Size(max = 10)
+    @Nationalized
+    @Column(name = "\"size\"", length = 10)
     private String size;
 
-    @Column(name = "color", length = 60)
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "color", length = 50)
     private String color;
 
-    @Column(name = "gender", length = 60)
+    @Size(max = 10)
+    @Nationalized
+    @Column(name = "gender", length = 10)
     private String gender;
 
-    @Column(name = "unit_price")
-    private Float unitPrice;
+    @NotNull
+    @Column(name = "price", nullable = false, precision = 18, scale = 2)
+    private BigDecimal price;
 
-    @Column(name = "discount")
-    private Float discount;
+    @ColumnDefault("0")
+    @Column(name = "discount", precision = 5, scale = 2)
+    private BigDecimal discount;
 
-    public String getProductId() {
-        return productId;
-    }
+    @ColumnDefault("0")
+    @Column(name = "quantity")
+    private Integer quantity;
 
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public String getProductCode() {
-        return productCode;
-    }
-
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public Float getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(Float unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public Float getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Float discount) {
-        this.discount = discount;
-    }
 }

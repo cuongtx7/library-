@@ -1,44 +1,59 @@
 package com.example.demo.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "product")
-public class Product extends AbstractAuditingEntity {
+public class Product {
+    @Id
+    @Size(max = 60)
+    @Column(name = "id", nullable = false, length = 60)
+    private String id;
 
+    @Size(max = 60)
     @Column(name = "name", length = 60)
     private String name;
 
-    @Column(name = "id_category", length = 60)
-    private String idCategory;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_category")
+    private Category category;
 
-    @Column(name = "description", length = 60)
+    @Size(max = 500)
+    @Nationalized
+    @Column(name = "description", length = 500)
     private String description;
 
-    public String getName() {
-        return name;
-    }
+    @Size(max = 255)
+    @Column(name = "created_by")
+    private String createdBy;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @NotNull
+    @Column(name = "created_date", nullable = false)
+    private Instant createdDate;
 
-    public String getIdCategory() {
-        return idCategory;
-    }
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate;
 
-    public void setIdCategory(String idCategory) {
-        this.idCategory = idCategory;
-    }
+    @Size(max = 255)
+    @Column(name = "last_modified_by")
+    private String lastModifiedBy;
 
-    public String getDescription() {
-        return description;
-    }
+    @Size(max = 200)
+    @NotNull
+    @Nationalized
+    @Column(name = "name_product", nullable = false, length = 200)
+    private String nameProduct;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

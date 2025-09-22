@@ -47,7 +47,13 @@
         <createIndex indexName="id" tableName="product">
             <column name="id"/>
         </createIndex>
-
+        <addForeignKeyConstraint
+                baseTableName="product"
+                baseColumnNames="id_category"
+                constraintName="category111"
+                referencedTableName="category"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
     </changeSet>
 </databaseChangeLog>
 

@@ -16,6 +16,10 @@
             <column name="id_order" type="varchar(60)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+
+            <column name="id_product" type="varchar(60)">
+                <constraints nullable="false"/>
+            </column>
             <column name="quantity" type="varchar(60)">
                 <constraints nullable="true"/>
             </column>
@@ -47,7 +51,15 @@
         <createIndex indexName="id_order" tableName="order_detail">
             <column name="id_order"/>
         </createIndex>
+        <addForeignKeyConstraint
+                baseTableName="order_detail"
+                baseColumnNames="id_order"
+                constraintName="12345678"
+                referencedTableName="order_table"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
 
     </changeSet>
+
 </databaseChangeLog>
 
