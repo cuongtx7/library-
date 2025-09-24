@@ -65,15 +65,15 @@ public class AccountResource {
     @PostMapping("/login")
     public ResponseEntity<Boolean> login(@Valid @RequestBody Login login) throws URISyntaxException {
 
-        if (login.getUserName() == null && login.getUserName().isEmpty()) {
-            throw new RuntimeException("useName null");
-        }
-        if (login.getEmail() == null && login.getEmail().isEmpty()) {
-            throw new RuntimeException("email null");
-        }
-        if (login.getPassword() == null && login.getPassword().isEmpty()) {
-            throw new RuntimeException("password null");
-        }
+//        if (login.getUserName() == null && login.getUserName().isEmpty()) {
+//            throw new RuntimeException("useName null");
+//        }
+//        if (login.getEmail() == null && login.getEmail().isEmpty()) {
+//            throw new RuntimeException("email null");
+//        }
+//        if (login.getPassword() == null && login.getPassword().isEmpty()) {
+//            throw new RuntimeException("password null");
+//        }
 
         Boolean result = accountService.checkLogin(login);
         return ResponseEntity.created(new URI("/api/account/" + login.getUserName())).body(result);

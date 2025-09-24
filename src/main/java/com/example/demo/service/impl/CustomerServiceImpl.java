@@ -29,11 +29,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO save(CustomerDTO customerDTO) {
         LocalDateTime now = LocalDateTime.now();
         Optional<Customer> account = null;
-        try {
-            account = customerRepository.findById(customerDTO.getId());
-        } catch (Exception e) {
-            throw new RuntimeException("id khong tồn tài trong hệ thống");
-        }
+
         if (customerDTO.getId() != null && !customerDTO.getId().isEmpty()) {
             if (!account.isPresent()) {
                 throw new RuntimeException("id khong tồn tài trong hệ thống1");
@@ -41,10 +37,20 @@ public class CustomerServiceImpl implements CustomerService {
             customerDTO.setLastModifiedBy(null);
             customerDTO.setLastModifiedDate(now);
         } else {
-            if (account.get().getEmail().equals(customerDTO.getEmail())) {
+            try {
+                account = customerRepository.findByEmail(customerDTO.getEmail());
+            } catch (Exception e) {
+                throw new RuntimeException("email khong tồn tài trong hệ thống");
+            }
+            if (account.isPresent()) {
                 throw new RuntimeException("Email đã tồn tài trong hệ thống");
             }
-            if (account.get().getPhone().equals(customerDTO.getPhone())) {
+            try {
+                account = customerRepository.findByPhone(customerDTO.getPhone());
+            } catch (Exception e) {
+                throw new RuntimeException("phone khong tồn tài trong hệ thống");
+            }
+            if (account.isPresent()) {
                 throw new RuntimeException("phone đã tồn tài trong hệ thống");
             }
             String newId = generateNewId();
@@ -78,12 +84,12 @@ public class CustomerServiceImpl implements CustomerService {
     private String generateNewId() {
         List<Customer> list = customerRepository.findTopByIdOrderByIdDesc();
         if (list.isEmpty()) {
-            return list.get(0).getId();
+            return "CT001";
         } else {
             String lastId = list.get(0).getId();
             int num = Integer.parseInt(lastId.substring(2));
             num++;
-            return String.format("C%03d", num);
+            return String.format("CT%03d", num);
         }
     }
 }
