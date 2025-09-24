@@ -10,17 +10,17 @@
 
     <!-- Added the entity ParamsInit. -->
     <changeSet id="21092025" author="cuongtx">
-        <!--        _added_entity_category-->
         <createTable tableName="order_detail"
-                     remarks="This entity for storing the configuration of script with id equals id of this entity">
+                     remarks="Chi tiết đơn hàng: chứa sản phẩm trong đơn hàng">
             <column name="id_order" type="varchar(60)">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints nullable="false"/>
             </column>
 
             <column name="id_product" type="varchar(60)">
                 <constraints nullable="false"/>
             </column>
-            <column name="quantity" type="varchar(60)">
+
+            <column name="quantity" type="int">
                 <constraints nullable="true"/>
             </column>
 
@@ -48,17 +48,27 @@
                 <constraints nullable="true"/>
             </column>
         </createTable>
-        <createIndex indexName="id_order" tableName="order_detail">
-            <column name="id_order"/>
-        </createIndex>
-        <addForeignKeyConstraint
-                baseTableName="order_detail"
-                baseColumnNames="id_order"
-                constraintName="12345678"
-                referencedTableName="order_table"
-                referencedColumnNames="id"
-                onDelete="CASCADE"/>
 
+        <!-- Composite PK -->
+        <addPrimaryKey tableName="order_detail"
+                       columnNames="id_order, id_product"
+                       constraintName="pk_orderdetail"/>
+
+        <!-- FK đến order_table -->
+        <addForeignKeyConstraint baseTableName="order_detail"
+                                 baseColumnNames="id_order"
+                                 constraintName="fk_orderdetail_order"
+                                 referencedTableName="order_table"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
+        <!-- FK đến product -->
+        <addForeignKeyConstraint baseTableName="order_detail"
+                                 baseColumnNames="id_product"
+                                 constraintName="fk_orderdetail_product"
+                                 referencedTableName="product"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
 
 </databaseChangeLog>

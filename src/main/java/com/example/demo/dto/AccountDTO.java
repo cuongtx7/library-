@@ -1,12 +1,14 @@
 package com.example.demo.dto;
 
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class AccountDTO {
 
+    @NotNull
     private String username;
-
+    @NotNull
     private String password;
     private String role;
 
@@ -16,7 +18,7 @@ public class AccountDTO {
 
     private String phone;
 
-
+    @NotNull
     private String email;
 
     private Boolean active;
@@ -24,12 +26,12 @@ public class AccountDTO {
 
     private String createdBy;
 
-    private LocalDateTime createdDate ;
+    private LocalDateTime createdDate;
 
 
     private String lastModifiedBy;
 
-    private LocalDateTime lastModifiedDate ;
+    private LocalDateTime lastModifiedDate;
 
     public String getUsername() {
         return username;

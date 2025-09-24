@@ -54,6 +54,7 @@
                 referencedTableName="category"
                 referencedColumnNames="id"
                 onDelete="CASCADE"/>
+
     </changeSet>
 </databaseChangeLog>
 

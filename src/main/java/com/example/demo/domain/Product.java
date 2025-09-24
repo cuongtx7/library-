@@ -17,8 +17,8 @@ import java.time.Instant;
 @Table(name = "product")
 public class Product {
     @Id
-    @Size(max = 60)
-    @Column(name = "id", nullable = false, length = 60)
+    @Size(max = 50)
+    @Column(name = "id", nullable = false, length = 50)
     private String id;
 
     @Size(max = 60)

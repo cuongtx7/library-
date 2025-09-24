@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+
+import com.example.demo.domain.Product;
 import com.example.demo.responses.ConfigResponse;
 
 public interface ProductService {

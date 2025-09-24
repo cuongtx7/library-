@@ -29,15 +29,16 @@
 
     <include file="/config/liquibase/changelog/21092025_add_entity_Order.xml"
              relativeToChangelogFile="false" />
-
-    <include file="config/liquibase/changelog/21092025_add_entity_OrderDetail.xml"
-             relativeToChangelogFile="false" />
-
     <include file="config/liquibase/changelog/21092025_add_entity_Product.xml"
              relativeToChangelogFile="false" />
 
     <include file="config/liquibase/changelog/21092025_add_entity_ProductVariant.xml"
              relativeToChangelogFile="false" />
+
+    <include file="config/liquibase/changelog/21092025_add_entity_OrderDetail.xml"
+             relativeToChangelogFile="false" />
+
+
 
 
 </databaseChangeLog>
