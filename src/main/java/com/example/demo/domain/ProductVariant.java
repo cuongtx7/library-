@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,12 +12,13 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "productVariant")
-public class ProductVariant extends AbstractAuditingEntity{
+public class ProductVariant extends AbstractAuditingEntity {
     @NotNull
     @Column(name = "id_variant", nullable = false, length = 10)
     private String idVariant;
@@ -57,5 +59,21 @@ public class ProductVariant extends AbstractAuditingEntity{
     @ColumnDefault("0")
     @Column(name = "quantity")
     private Integer quantity;
+    @Id
+    @Column(name = "id")
+    private String id;
+
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+
+    @Column(name = "last_modified_by")
+    private String lastModifiedBy;
+
+    @Column(name = "last_modified_date")
+    private LocalDateTime lastModifiedDate;
 
 }

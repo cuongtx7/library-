@@ -30,10 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
         LocalDateTime now = LocalDateTime.now();
         Optional<Customer> account = null;
 
-        if (customerDTO.getId() != null && !customerDTO.getId().isEmpty()) {
-            if (!account.isPresent()) {
-                throw new RuntimeException("id khong tồn tài trong hệ thống1");
-            }
+        if (customerDTO.getId() != null ) {
             customerDTO.setLastModifiedBy(null);
             customerDTO.setLastModifiedDate(now);
         } else {
