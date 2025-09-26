@@ -25,6 +25,10 @@
                 <constraints nullable="true"/>
             </column>
 
+            <column name="product_variant_id" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+
             <column name="status" type="varchar(50)">
                 <constraints nullable="true"/>
             </column>
@@ -77,6 +81,20 @@
                 baseColumnNames="customer_id"
                 constraintName="customwwer"
                 referencedTableName="customer"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="order_table"
+                baseColumnNames="account_id"
+                constraintName="account"
+                referencedTableName="account"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="order_table"
+                baseColumnNames="product_variant_id"
+                constraintName="product_variant112"
+                referencedTableName="product_variant"
                 referencedColumnNames="id"
                 onDelete="CASCADE"/>
     </changeSet>

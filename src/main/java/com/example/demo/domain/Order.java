@@ -1,15 +1,14 @@
 package com.example.demo.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_table")
-public class Order  {
+public class Order {
     @Id
     @Column(name = "id")
     private String id;
@@ -26,11 +25,20 @@ public class Order  {
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
-    @Column(name = "customer_id", length = 255)
-    private String customerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
-    @Column(name = "account_id", length = 50)
-    private String accountId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "product_variant_id")
+    private ProductVariant productVariant;
 
     @Column(name = "status", length = 50)
     private String status;
@@ -50,21 +58,6 @@ public class Order  {
     @Column(name = "paid_amount")
     private Float paidAmount;
 
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
 
     public String getStatus() {
         return status;
@@ -152,5 +145,29 @@ public class Order  {
 
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public ProductVariant getProductVariant() {
+        return productVariant;
+    }
+
+    public void setProductVariant(ProductVariant productVariant) {
+        this.productVariant = productVariant;
     }
 }

@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
+
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -33,7 +34,12 @@ public class AccountServiceImpl implements AccountService {
             if (!account.isPresent()) {
                 throw new RuntimeException("id khoong tồn tài trong hệ thống");
             }
-            accountDTO.setPassword(Base64.getEncoder().encodeToString(accountDTO.getPassword().getBytes()));
+            String encodedPassword = Base64.getEncoder().encodeToString(accountDTO.getPassword().getBytes());
+            if (!encodedPassword.equals(account.get().getPassword())) {
+                accountDTO.setPassword(encodedPassword);
+            }else {
+                accountDTO.setPassword(Base64.getEncoder().encodeToString(accountDTO.getPassword().getBytes()));
+            }
             accountDTO.setLastModifiedBy(accountDTO.getEmail());
             accountDTO.setLastModifiedDate(now);
         } else {
@@ -65,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Boolean checkLogin(Login login) {
+    public String checkLogin(Login login) {
         Optional<Account> account = Optional.empty();
 
         try {
@@ -80,19 +86,19 @@ public class AccountServiceImpl implements AccountService {
         }
 
         if (!account.isPresent()) {
-            return false;
+            return "";
         }
 
         Account account1 = account.get();
 
         if (!account1.getActive()) {
-            return false;
+            return "";
         }
         String encodedPassword = Base64.getEncoder().encodeToString(login.getPassword().getBytes());
         if (!encodedPassword.equals(account1.getPassword())) {
             throw new RuntimeException("Mật khẩu không đúng");
         }
-        return true;
+        return account.get().getId();
     }
 
     @Override

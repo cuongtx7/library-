@@ -1,10 +1,10 @@
-package com.example.demo.services.implement;
+package com.example.demo.service.impl;
 
 import com.example.demo.domain.Category;
 import com.example.demo.dto.CategoryDTO;
 import com.example.demo.mapper.CategoryMapper;
-import com.example.demo.repositories.CategoryRepository;
-import com.example.demo.services.CategoryService;
+import com.example.demo.repository.CategoryRepository;
+import com.example.demo.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service

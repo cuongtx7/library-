@@ -1,8 +1,5 @@
 package com.example.demo.dto;
 
-import jakarta.persistence.Column;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class ProductVariantDTO {
@@ -26,6 +23,7 @@ public class ProductVariantDTO {
 
     private String id;
 
+
     private String createdBy;
 
     private LocalDateTime createdDate;
@@ -35,10 +33,6 @@ public class ProductVariantDTO {
 
     private LocalDateTime lastModifiedDate;
 
-
-    public String getProductId() {
-        return productId;
-    }
 
     public String getId() {
         return id;
@@ -52,10 +46,6 @@ public class ProductVariantDTO {
         return createdBy;
     }
 
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
 
     public String getProductCode() {
         return productCode;
@@ -131,5 +121,13 @@ public class ProductVariantDTO {
 
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }

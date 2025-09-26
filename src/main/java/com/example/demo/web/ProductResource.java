@@ -1,9 +1,7 @@
 package com.example.demo.web;
 
-import com.example.demo.dto.CustomerDTO;
 import com.example.demo.dto.ProductDTO;
-import com.example.demo.service.CustomerService;
-import com.example.demo.services.ProductService;
+import com.example.demo.service.ProductService;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;

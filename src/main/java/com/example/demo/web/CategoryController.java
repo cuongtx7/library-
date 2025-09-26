@@ -1,12 +1,9 @@
-package com.example.demo.controller;
+package com.example.demo.web;
 
 import com.example.demo.dto.CategoryDTO;
-import com.example.demo.dto.ProductDTO;
-import com.example.demo.responses.ConfigResponse;
-import com.example.demo.services.CategoryService;
+import com.example.demo.service.CategoryService;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

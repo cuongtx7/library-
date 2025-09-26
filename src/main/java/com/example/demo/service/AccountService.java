@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface AccountService {
     AccountDTO save(AccountDTO accountDTO);
 
-    Boolean checkLogin(Login login);
+    String checkLogin(Login login);
 
 
     Page<AccountDTO> findAll(Pageable pageable);

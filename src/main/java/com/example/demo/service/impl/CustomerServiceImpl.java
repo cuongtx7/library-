@@ -1,8 +1,6 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.domain.Account;
 import com.example.demo.domain.Customer;
-import com.example.demo.dto.AccountDTO;
 import com.example.demo.dto.CustomerDTO;
 import com.example.demo.mapper.CustomerMapper;
 import com.example.demo.repository.CustomerRepository;

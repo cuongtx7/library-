@@ -1,41 +1,90 @@
 package com.example.demo.dto;
 
-import jakarta.persistence.Column;
+import com.example.demo.domain.Account;
+import com.example.demo.domain.Customer;
+import com.example.demo.domain.ProductVariant;
+import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class OrderDTO {
+
+    private String id;
+
+
+    private String createdBy;
+
+
+    private LocalDateTime createdDate;
+
+
+    private String lastModifiedBy;
+
+
+    private LocalDateTime lastModifiedDate;
+
     private String customerId;
+
 
     private String accountId;
 
 
-    private String status;
+    private String productVariantId;
 
+    private String status;
 
     private Float productTotal;
 
-
     private Float paymentAmount;
-
 
     private String note;
 
     private String paymentMethod;
 
     private Float paidAmount;
-    private String id;
 
-    private String createdBy;
+    public String getId() {
+        return id;
+    }
 
-    private LocalDateTime createdDate ;
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public String getCreatedBy() {
+        return createdBy;
+    }
 
-    private String lastModifiedBy;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
 
-    private LocalDateTime lastModifiedDate ;
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
 
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
 
     public String getCustomerId() {
         return customerId;
@@ -51,6 +100,14 @@ public class OrderDTO {
 
     public void setAccountId(String accountId) {
         this.accountId = accountId;
+    }
+
+    public String getProductVariantId() {
+        return productVariantId;
+    }
+
+    public void setProductVariantId(String productVariantId) {
+        this.productVariantId = productVariantId;
     }
 
     public String getStatus() {
@@ -99,45 +156,5 @@ public class OrderDTO {
 
     public void setPaidAmount(Float paidAmount) {
         this.paidAmount = paidAmount;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public LocalDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
     }
 }
