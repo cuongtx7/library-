@@ -1,6 +1,5 @@
 package com.example.demo.web;
 
-import com.example.demo.domain.Order;
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.dto.SeachOrder;
 import com.example.demo.service.OrderService;

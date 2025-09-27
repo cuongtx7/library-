@@ -1,101 +1,53 @@
 package com.example.demo.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "order_detail")
 public class OrderDetail {
-    @Id
-    @Column(name = "id")
-    private String id;
+    @EmbeddedId
+    private OrderDetailId id;
 
-    @Column(name = "created_by")
-    private String createdBy;
+    @MapsId("idOrder")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_order", nullable = false)
+    private com.example.demo.domain.OrderTable idOrder;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    @MapsId("idProduct")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_product", nullable = false)
+    private com.example.demo.domain.Product idProduct;
 
-
-    @Column(name = "last_modified_by")
-    private String lastModifiedBy;
-
-    @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
-    @Column(name = "quantity", length = 60)
-    private String quantity;
+    @Column(name = "quantity")
+    private Integer quantity;
 
     @Column(name = "unit_price")
-    private Float unitPrice;
+    private Double unitPrice;
 
     @Column(name = "discount")
-    private Float discount;
+    private Double discount;
 
-    public String getQuantity() {
-        return quantity;
-    }
+    @Size(max = 60)
+    @Column(name = "created_by", length = 60)
+    private String createdBy;
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
+    @NotNull
+    @Column(name = "created_date", nullable = false)
+    private Instant createdDate;
 
-    public Float getUnitPrice() {
-        return unitPrice;
-    }
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate;
 
-    public void setUnitPrice(Float unitPrice) {
-        this.unitPrice = unitPrice;
-    }
+    @Size(max = 60)
+    @Column(name = "last_modified_by", length = 60)
+    private String lastModifiedBy;
 
-    public Float getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Float discount) {
-        this.discount = discount;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public LocalDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
 }

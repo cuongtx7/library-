@@ -1,10 +1,7 @@
 package com.example.demo.service;
 
 
-import com.example.demo.domain.Product;
-import com.example.demo.dto.CategoryDTO;
 import com.example.demo.dto.ProductDTO;
-import com.example.demo.responses.ConfigResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

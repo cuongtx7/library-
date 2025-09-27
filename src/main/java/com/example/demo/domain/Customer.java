@@ -4,132 +4,62 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "customer")
-public class Customer  {
+public class Customer {
     @Id
-    @Column(name = "id")
+    @Size(max = 60)
+    @Column(name = "id", nullable = false, length = 60)
     private String id;
 
-    @Column(name = "created_by")
-    private String createdBy;
-
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-
-    @Column(name = "last_modified_by")
-    private String lastModifiedBy;
-
-    @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
-    @Column(name = "name", length = 255)
+    @Size(max = 255)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "birth_day")
-    private LocalDateTime birthDay;
+    private Instant birthDay;
 
+    @Size(max = 20)
     @Column(name = "gender", length = 20)
     private String gender;
 
-    @Column(name = "address", length = 255)
+    @Size(max = 255)
+    @Column(name = "address")
     private String address;
 
+    @Size(max = 20)
     @Column(name = "phone", length = 20)
     private String phone;
 
+    @Size(max = 100)
     @Column(name = "email", length = 100)
     private String email;
 
-    public String getName() {
-        return name;
-    }
+    @Size(max = 60)
+    @Column(name = "created_by", length = 60)
+    private String createdBy;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @NotNull
+    @Column(name = "created_date", nullable = false)
+    private Instant createdDate;
 
-    public LocalDateTime getBirthDay() {
-        return birthDay;
-    }
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate;
 
-    public void setBirthDay(LocalDateTime birthDay) {
-        this.birthDay = birthDay;
-    }
+    @Size(max = 60)
+    @Column(name = "last_modified_by", length = 60)
+    private String lastModifiedBy;
 
-    public String getGender() {
-        return gender;
-    }
+    @Column(name = "is_delete")
+    private Boolean isDelete;
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public LocalDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
 }

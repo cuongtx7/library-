@@ -9,90 +9,42 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "category")
-public class Category  {
+public class Category {
     @Id
-    @Column(name = "id")
+    @Size(max = 60)
+    @Column(name = "id", nullable = false, length = 60)
     private String id;
 
-    @Column(name = "created_by")
-    private String createdBy;
-
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
-
-    @Column(name = "last_modified_by")
-    private String lastModifiedBy;
-
-    @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
-
-    @Size(max = 100)
-    @NotNull
-    @Column(name = "name", nullable = false, length = 100)
+    @Size(max = 255)
+    @Column(name = "name")
     private String name;
 
-    @Size(max = 225)
-    @Column(name = "description", length = 225)
+    @Size(max = 255)
+    @Column(name = "description")
     private String description;
 
-    public String getId() {
-        return id;
-    }
+    @Size(max = 60)
+    @Column(name = "created_by", length = 60)
+    private String createdBy;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    @NotNull
+    @Column(name = "created_date", nullable = false)
+    private Instant createdDate;
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate;
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
+    @Size(max = 60)
+    @Column(name = "last_modified_by", length = 60)
+    private String lastModifiedBy;
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
+    @Column(name = "is_delete")
+    private Boolean isDelete;
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public LocalDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

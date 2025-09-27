@@ -25,7 +25,7 @@
                 <constraints nullable="true"/>
             </column>
 
-            <column name="product_variant_id" type="varchar(50)">
+            <column name="product_variant_id" type="varchar(60)">
                 <constraints nullable="true"/>
             </column>
 
@@ -86,7 +86,7 @@
         <addForeignKeyConstraint
                 baseTableName="order_table"
                 baseColumnNames="account_id"
-                constraintName="account"
+                constraintName="fk_order_account"
                 referencedTableName="account"
                 referencedColumnNames="id"
                 onDelete="CASCADE"/>

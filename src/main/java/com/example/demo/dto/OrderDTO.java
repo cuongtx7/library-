@@ -1,13 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.domain.Account;
-import com.example.demo.domain.Customer;
-import com.example.demo.domain.ProductVariant;
-import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class OrderDTO {

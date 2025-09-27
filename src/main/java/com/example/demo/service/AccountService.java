@@ -2,22 +2,16 @@ package com.example.demo.service;
 
 import com.example.demo.dto.AccountDTO;
 import com.example.demo.dto.Login;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
+import com.example.demo.dto.TokenDTO;
+import com.example.demo.responses.ConfigResponse;
 
 public interface AccountService {
-    AccountDTO save(AccountDTO accountDTO);
-
-    String checkLogin(Login login);
-
-
-    Page<AccountDTO> findAll(Pageable pageable);
-
-
-    Optional<AccountDTO> findOne(String id);
-
+    ConfigResponse<AccountDTO> getAccounts(Integer page, Integer size);
+    AccountDTO save(AccountDTO accountDTO, TokenDTO tokenDTO);
+    AccountDTO update(AccountDTO accountDTO, TokenDTO tokenDTO);
+    AccountDTO checkLogin(Login login);
+    AccountDTO getAccount(String id);
+    TokenDTO getAccountToken(String id);
     void delete(String id);
 
 }

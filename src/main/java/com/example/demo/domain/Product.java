@@ -9,109 +9,62 @@ import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "product")
 public class Product {
     @Id
-    @Size(max = 50)
-    @Column(name = "id", nullable = false, length = 50)
+    @Size(max = 60)
+    @Column(name = "id", nullable = false, length = 60)
     private String id;
 
     @Size(max = 60)
     @Column(name = "name", length = 60)
     private String name;
 
+    @Size(max = 60)
+    @Nationalized
+    @Column(name = "product_code", length = 60)
+    private String productCode;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_category")
-    private Category category;
+    private Category idCategory;
 
-    @Size(max = 500)
-    @Nationalized
-    @Column(name = "description", length = 500)
+    @Size(max = 60)
+    @Column(name = "description", length = 60)
     private String description;
 
-    @Size(max = 255)
-    @Column(name = "created_by")
+    @Column(name = "unitPrice", precision = 18, scale = 2)
+    private BigDecimal unitPrice;
+
+    @Column(name = "discount", precision = 5)
+    private BigDecimal discount;
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Size(max = 60)
+    @Column(name = "created_by", length = 60)
     private String createdBy;
 
     @NotNull
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate;
+    private Instant createdDate;
 
     @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
+    private Instant lastModifiedDate;
 
-    @Size(max = 255)
-    @Column(name = "last_modified_by")
+    @Size(max = 60)
+    @Column(name = "last_modified_by", length = 60)
     private String lastModifiedBy;
 
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public LocalDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+    @Column(name = "is_delete")
+    private Boolean isDelete;
 
 }

@@ -60,7 +60,7 @@
                                  constraintName="fk_orderdetail_order"
                                  referencedTableName="order_table"
                                  referencedColumnNames="id"
-                                 onDelete="CASCADE"/>
+        />
 
         <!-- FK đến product -->
         <addForeignKeyConstraint baseTableName="order_detail"
@@ -68,7 +68,7 @@
                                  constraintName="fk_orderdetail_product"
                                  referencedTableName="product"
                                  referencedColumnNames="id"
-                                 onDelete="CASCADE"/>
+        />
     </changeSet>
 
 </databaseChangeLog>

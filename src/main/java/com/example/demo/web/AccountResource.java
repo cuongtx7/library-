@@ -1,10 +1,16 @@
 package com.example.demo.web;
 
+import com.example.demo.cors.JwtTokenProvider;
 import com.example.demo.dto.AccountDTO;
 import com.example.demo.dto.Login;
+import com.example.demo.dto.TokenDTO;
+import com.example.demo.dto.TokenSecurity;
+import com.example.demo.responses.ConfigResponse;
 import com.example.demo.service.AccountService;
+import com.example.demo.until.JwtUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,65 +31,61 @@ import java.util.Optional;
 public class AccountResource {
     @Autowired
     private AccountService accountService;
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/account")
-    public ResponseEntity<AccountDTO> createAccount(@Valid @RequestBody AccountDTO accountDTO) throws URISyntaxException {
-
-        if (accountDTO.getUsername() == null && accountDTO.getUsername().isEmpty()) {
-            throw new RuntimeException("useName null");
-        }
-        if (accountDTO.getEmail() == null && accountDTO.getEmail().isEmpty()) {
-            throw new RuntimeException("email null");
-        }
-        if (accountDTO.getPassword() == null && accountDTO.getPassword().isEmpty()) {
-            throw new RuntimeException("password null");
-        }
-
-        AccountDTO result = accountService.save(accountDTO);
-        return ResponseEntity.created(new URI("/api/account/" + result.getId())).body(result);
+    public ResponseEntity<AccountDTO> createAccount(
+            @RequestBody AccountDTO accountDTO,
+            @RequestHeader("Authorization") String authHeader
+    )
+    {
+        String token = JwtUtil.getToken(authHeader);
+        TokenDTO tokenDTO = jwtTokenProvider.getUserInfo(token);
+        AccountDTO result = accountService.save(accountDTO, tokenDTO);
+        return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/account")
-    public ResponseEntity<AccountDTO> updateAccount(@Valid @RequestBody AccountDTO accountDTO) throws URISyntaxException {
+    @PutMapping
+    public ResponseEntity<AccountDTO> updateAccount(
+            @Valid @RequestBody AccountDTO accountDTO,
+            @RequestHeader("Authorization") String authHeader
+    ) {
 
-        if (accountDTO.getUsername() == null || accountDTO.getUsername().isEmpty()) {
-            throw new RuntimeException("Username null hoặc rỗng");
-        }
-
-        if (accountDTO.getEmail() == null || accountDTO.getEmail().isEmpty()) {
-            throw new RuntimeException("Email null hoặc rỗng");
-        }
-
-        if (accountDTO.getPassword() == null || accountDTO.getPassword().isEmpty()) {
-            throw new RuntimeException("Password null hoặc rỗng");
-        }
-
-        AccountDTO result = accountService.save(accountDTO);
-        return ResponseEntity.created(new URI("/api/account/" + result.getId())).body(result);
+        String token = JwtUtil.getToken(authHeader);
+        TokenDTO tokenDTO = jwtTokenProvider.getUserInfo(token);
+        AccountDTO result = accountService.update(accountDTO, tokenDTO);
+        return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody Login login) throws URISyntaxException {
-        String result = accountService.checkLogin(login);
-        return ResponseEntity.created(new URI("/api/account/" + login.getUserName())).body(result);
+    @PostMapping("/auth/login")
+    public ResponseEntity<TokenSecurity> login(@Valid @RequestBody Login login) throws URISyntaxException {
+        AccountDTO result = accountService.checkLogin(login);
+        if(result == null){
+            return ResponseEntity.ok(new TokenSecurity());
+        }
+        String token = jwtTokenProvider.createToken(result.getUsername(),accountService.getAccountToken(result.getId()));
+        return ResponseEntity.ok(new TokenSecurity(token));
     }
-
 
     @GetMapping("/account")
-    public ResponseEntity<List<AccountDTO>> getAllAccount(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder) {
-
-        Page<AccountDTO> page = accountService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    public ResponseEntity<ConfigResponse<AccountDTO>> getAllAccount(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestHeader("Authorization") String authHeader
+            ) {
+        return ResponseEntity.ok(accountService.getAccounts(page, size));
     }
 
     @GetMapping("/account/{id}")
-    public ResponseEntity<AccountDTO> getAccount(@PathVariable String id) {
-        Optional<AccountDTO> selectorDTO = accountService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(selectorDTO);
+    public ResponseEntity<AccountDTO> getAccount(
+            @PathVariable String id
+    ) {
+
+        return ResponseEntity.ok(accountService.getAccount(id));
     }
 
-    @DeleteMapping("/selectors/{id}")
+    @DeleteMapping("/account/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable String id) {
         accountService.delete(id);
         return ResponseEntity.noContent().build();
