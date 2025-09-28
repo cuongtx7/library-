@@ -5,6 +5,7 @@ import com.example.demo.dto.AccountDTO;
 import com.example.demo.dto.Login;
 import com.example.demo.dto.TokenDTO;
 import com.example.demo.dto.TokenSecurity;
+import com.example.demo.requests.filters.AccountFilters;
 import com.example.demo.responses.ConfigResponse;
 import com.example.demo.service.AccountService;
 import com.example.demo.until.JwtUtil;
@@ -72,9 +73,9 @@ public class AccountResource {
     public ResponseEntity<ConfigResponse<AccountDTO>> getAllAccount(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size,
-            @RequestHeader("Authorization") String authHeader
+            @ModelAttribute AccountFilters filters
             ) {
-        return ResponseEntity.ok(accountService.getAccounts(page, size));
+        return ResponseEntity.ok(accountService.getAccounts(page, size, filters));
     }
 
     @GetMapping("/account/{id}")
@@ -86,8 +87,13 @@ public class AccountResource {
     }
 
     @DeleteMapping("/account/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable String id) {
-        accountService.delete(id);
+    public ResponseEntity<Void> deleteAccount(
+            @PathVariable String id,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String token = JwtUtil.getToken(authHeader);
+        TokenDTO tokenDTO = jwtTokenProvider.getUserInfo(token);
+        accountService.delete(id, tokenDTO);
         return ResponseEntity.noContent().build();
     }
 }

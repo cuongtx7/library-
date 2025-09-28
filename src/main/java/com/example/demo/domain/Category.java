@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -35,10 +36,10 @@ public class Category {
 
     @NotNull
     @Column(name = "created_date", nullable = false)
-    private Instant createdDate;
+    private LocalDateTime createdDate;
 
     @Column(name = "last_modified_date")
-    private Instant lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     @Size(max = 60)
     @Column(name = "last_modified_by", length = 60)

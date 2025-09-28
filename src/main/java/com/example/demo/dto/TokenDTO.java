@@ -12,5 +12,6 @@ import lombok.Setter;
 public class TokenDTO {
     private String accId;
     private String accName;
+    private String fullname;
     private String permission;
 }

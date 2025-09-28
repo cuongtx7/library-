@@ -37,6 +37,7 @@ public interface AccountRepository extends JpaRepository<Account, String>, JpaSp
     SELECT new com.example.demo.dto.TokenDTO(
         a.id,
         a.username,
+        a.fullname,
         a.role
         )
     FROM Account a

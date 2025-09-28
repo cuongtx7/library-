@@ -28,31 +28,31 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-        Optional<CategoryDTO> category = null;
-        try {
-            category = categoryService.findOne(productDTO.getIdCategory());
-        } catch (Exception e) {
-            throw new RuntimeException("không lấy được thông tin category");
-        }
-        if (!category.isPresent()) {
-            throw new RuntimeException(productDTO.getIdCategory() + " không có thông tin category");
-        }
-
-        LocalDateTime now = LocalDateTime.now();
-
-        if (productDTO.getId() != null) {
-            productDTO.setLastModifiedBy(null);
-            productDTO.setLastModifiedDate(now);
-        } else {
-            String newId = generateNewId();
-            productDTO.setId(newId);
-            productDTO.setCreatedBy(null);
-            productDTO.setCreatedDate(now);
-        }
-        Product customer = productMapper.toEntity(productDTO);
-        customer = productRepository.save(customer);
-        return productMapper.toDto(customer);
-
+//        Optional<CategoryDTO> category = null;
+//        try {
+//            category = categoryService.findOne(productDTO.getIdCategory());
+//        } catch (Exception e) {
+//            throw new RuntimeException("không lấy được thông tin category");
+//        }
+//        if (!category.isPresent()) {
+//            throw new RuntimeException(productDTO.getIdCategory() + " không có thông tin category");
+//        }
+//
+//        LocalDateTime now = LocalDateTime.now();
+//
+//        if (productDTO.getId() != null) {
+//            productDTO.setLastModifiedBy(null);
+//            productDTO.setLastModifiedDate(now);
+//        } else {
+//            String newId = generateNewId();
+//            productDTO.setId(newId);
+//            productDTO.setCreatedBy(null);
+//            productDTO.setCreatedDate(now);
+//        }
+//        Product customer = productMapper.toEntity(productDTO);
+//        customer = productRepository.save(customer);
+//        return productMapper.toDto(customer);
+        return null;
     }
 
     @Override

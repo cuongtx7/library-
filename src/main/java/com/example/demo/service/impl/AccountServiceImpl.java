@@ -6,8 +6,10 @@ import com.example.demo.dto.Login;
 import com.example.demo.dto.TokenDTO;
 import com.example.demo.mapper.AccountMapper;
 import com.example.demo.repository.AccountRepository;
+import com.example.demo.requests.filters.AccountFilters;
 import com.example.demo.responses.ConfigResponse;
 import com.example.demo.service.AccountService;
+import com.example.demo.specification.AccountSpecification;
 import com.example.demo.until.CheckNumber;
 import com.example.demo.until.GenerateId;
 import lombok.AccessLevel;
@@ -38,15 +40,12 @@ public class AccountServiceImpl implements AccountService {
     GenerateId generateId;
 
     @Override
-    public ConfigResponse<AccountDTO> getAccounts(Integer page, Integer size) {
+    public ConfigResponse<AccountDTO> getAccounts(Integer page, Integer size, AccountFilters filters) {
         try {
             page = CheckNumber.isNumeric(String.valueOf(page)) ? page : 1;
             size = CheckNumber.isNumeric(String.valueOf(size)) ? size : 14;
 
-            Specification<Account> spec = Specification.where(
-                    (root, query, criteriaBuilder) ->
-                            criteriaBuilder.equal(root.get("isDelete"), Boolean.FALSE)
-            );
+            Specification<Account> spec = AccountSpecification.filters(filters);
             Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdDate"));
             Page<Account> accounts = accountRepository.findAll(spec, pageable);
 
@@ -78,7 +77,8 @@ public class AccountServiceImpl implements AccountService {
             newAccount.setPassword(BCrypt.hashpw(accountDTO.getPassword(), BCrypt.gensalt()));
             newAccount.setCreatedDate(LocalDateTime.now());
             newAccount.setLastModifiedDate(LocalDateTime.now());
-            newAccount.setCreatedBy(accountDTO.getFullname());
+            newAccount.setCreatedBy(tokenDTO.getFullname());
+            newAccount.setLastModifiedBy(tokenDTO.getFullname());
             newAccount.setActive(true);
             newAccount.setIsDelete(false);
 
@@ -104,7 +104,7 @@ public class AccountServiceImpl implements AccountService {
             account.setRole(accountDTO.getRole());
             account.setActive(accountDTO.getActive());
             account.setLastModifiedDate(LocalDateTime.now());
-            account.setLastModifiedBy(accountDTO.getFullname());
+            account.setLastModifiedBy(tokenDTO.getFullname());
             return accountMapper.toDto(accountRepository.save(account));
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
@@ -155,14 +155,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public void delete(String id) {
+    public AccountDTO delete(String id, TokenDTO tokenDTO) {
         try {
             Account account = accountRepository.findById(id)
                     .orElseThrow(() -> new NoSuchElementException("Account not found by id: " + id));
 
             account.setIsDelete(true);
+            account.setLastModifiedDate(LocalDateTime.now());
+            account.setLastModifiedBy(tokenDTO.getFullname());
 
-            accountRepository.save(account);
+            return accountMapper.toDto(accountRepository.save(account));
         }catch(NoSuchElementException e) {
             throw new NoSuchElementException(e.getMessage());
         } catch (RuntimeException e) {

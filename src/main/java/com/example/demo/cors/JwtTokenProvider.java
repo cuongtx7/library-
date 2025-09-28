@@ -88,6 +88,7 @@ public class JwtTokenProvider {
         return new TokenDTO(
                 safeToString(roleMap.get("accId")),
                 safeToString(roleMap.get("accName")),
+                safeToString(roleMap.get("fullname")),
                 safeToString(roleMap.get("permission"))
         );
     }

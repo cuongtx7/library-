@@ -2,17 +2,29 @@ package com.example.demo.service.impl;
 
 import com.example.demo.domain.Category;
 import com.example.demo.dto.CategoryDTO;
+import com.example.demo.dto.TokenDTO;
 import com.example.demo.mapper.CategoryMapper;
 import com.example.demo.repository.CategoryRepository;
+import com.example.demo.requests.filters.CategoryFilters;
+import com.example.demo.responses.ConfigResponse;
 import com.example.demo.service.CategoryService;
+import com.example.demo.specification.CategorySpecification;
+import com.example.demo.until.CheckNumber;
+import com.example.demo.until.GenerateId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -20,124 +32,92 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryMapper categoryMapper;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private GenerateId generateId;
 
     @Override
-    public CategoryDTO save(CategoryDTO categoryDTO) {
-        LocalDateTime now = LocalDateTime.now();
+    public ConfigResponse<CategoryDTO> getCategories(Integer page, Integer size, CategoryFilters filters) {
+        try {
+            page = CheckNumber.isNumeric(String.valueOf(page)) ? page : 1;
+            size = CheckNumber.isNumeric(String.valueOf(size)) ? size : 14;
 
-        if (categoryDTO.getId() != null) {
-            categoryDTO.setLastModifiedBy(null);
-            categoryDTO.setLastModifiedDate(now);
-        } else {
+            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdDate"));
 
-            String newId = generateNewId();
-            categoryDTO.setId(newId);
-            categoryDTO.setCreatedBy(null);
-            categoryDTO.setCreatedDate(now);
-        }
-        Category customer = categoryMapper.toEntity(categoryDTO);
-        customer = categoryRepository.save(customer);
-        return categoryMapper.toDto(customer);
-    }
+            Specification<Category> spec = CategorySpecification.filters(filters);
+            Page<Category> categories = categoryRepository.findAll(spec, pageable);
 
-    @Override
-    public Page<CategoryDTO> findAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable)
-                .map(categoryMapper::toDto);
-    }
+            List<CategoryDTO> categoryDTOS = categories.getContent()
+                    .stream()
+                    .map(categoryMapper::toDto)
+                    .collect(Collectors.toList());
 
-    @Override
-    public Optional<CategoryDTO> findOne(String id) {
-        return categoryRepository.findById(id)
-                .map(categoryMapper::toDto);
-    }
-
-    @Override
-    public void delete(String id) {
-        categoryRepository.deleteById(id);
-    }
-
-    private String generateNewId() {
-        List<Category> list = categoryRepository.findTopByIdOrderByIdDesc();
-        if (list.isEmpty()) {
-            return "CTG001";
-        } else {
-            String lastId = list.get(0).getId();
-            int num = Integer.parseInt(lastId.substring(3));
-            num++;
-            return String.format("CTG%03d", num);
+            return new ConfigResponse<>(categoryDTOS, (int) categories.getTotalElements());
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
     }
-//    CategoryRepository categoryRepository;
-//    CategoryMapper categoryMapper;
-//    GenerateId generateId;
-//
-//    @Override
-//    public ConfigResponse<CategoryDTO> getCategories(Integer page, Integer size) {
-//        try {
-//            page = CheckNumber.isNumeric(String.valueOf(page)) ? page : 1;
-//            size = CheckNumber.isNumeric(String.valueOf(size)) ? size : 14;
-//
-//            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "id"));
-//
-//            Page<Category> categories = categoryRepository.findAll(pageable);
-//            return new ConfigResponse<>(categoryMapper.toDTOList(categories.getContent()), (int) categories.getTotalElements());
-//        } catch (RuntimeException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    @Transactional
-//    @Override
-//    public CategoryDTO create(CategoryDTO categoryDTO) {
-//        if (categoryDTO == null) {
-//            throw new IllegalArgumentException("CategoryDTO cannot be null");
-//        }
-//
-//        try {
-//            String newId = generateId.generateId(categoryRepository, "CT");
-//            if (categoryRepository.existsById(newId)) {
-//                throw new DuplicateRecordException("Duplicate ID generated: " + newId);
-//            }
-//            Category category = new Category();
-////            category.setIdCategory(newId);
-//            category.setId(newId);
-//            category.setNameCategory(categoryDTO.getNameCategory());
-//            category.setDescriptionCategory(categoryDTO.getDescriptionCategory());
-//
-//            Category savedCategory = categoryRepository.save(category);
-//            return categoryMapper.toDTO(savedCategory);
-//        } catch (IllegalArgumentException | DuplicateRecordException e) {
-//            throw e;
-//        } catch (RuntimeException e) {
-//            throw new RuntimeException("Failed to create category: " + e.getMessage(), e);
-//        }
-//    }
-//
-//    @Override
-//    public CategoryDTO update(CategoryDTO categoryDTO) {
-//        try {
-//            Specification<Category> spec = Specification.where(
-//                    (root, query, cb) ->
-//                    cb.equal(root.get("idCategory"), categoryDTO.getIdCategory())
-//            );
-//            Category category = categoryRepository.findOne(spec)
-//                    .orElseThrow(() -> new NoSuchElementException("Category not found by id: " + categoryDTO.getIdCategory()));
-//
-//            category.setNameCategory(categoryDTO.getNameCategory());
-//            category.setDescriptionCategory(categoryDTO.getNameCategory());
-//
-//            return categoryMapper.toDTO(categoryRepository.save(category));
-//        } catch (RuntimeException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    @Override
-//    public CategoryDTO delete(CategoryDTO categoryDTO) {
-//        return null;
-//    }
 
+    @Override
+    public CategoryDTO save(CategoryDTO categoryDTO, TokenDTO tokenDTO) {
+        try {
+            Category category = categoryMapper.toEntity(categoryDTO);
+            category.setId(generateId.generateId(categoryRepository,"CT"));
+            category.setCreatedBy(tokenDTO.getFullname());
+            category.setCreatedDate(LocalDateTime.now());
+            category.setLastModifiedDate(LocalDateTime.now());
+            category.setLastModifiedBy(tokenDTO.getFullname());
+            category.setIsDelete(false);
 
+            return categoryMapper.toDto(categoryRepository.save(category));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Transactional
+    @Override
+    public CategoryDTO update(CategoryDTO categoryDTO, TokenDTO tokenDTO) {
+        try {
+            Category category = categoryRepository.findById(categoryDTO.getId())
+                    .orElseThrow(() -> new NoSuchElementException("Không tìm thấy thể loại cho id: "+ categoryDTO.getId()));
+
+            category.setName(categoryDTO.getName());
+            category.setDescription(categoryDTO.getDescription());
+            category.setLastModifiedDate(LocalDateTime.now());
+            category.setLastModifiedBy(tokenDTO.getFullname());
+
+            return categoryMapper.toDto(categoryRepository.save(category));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public CategoryDTO getCategory(String id) {
+        try {
+            Category category = categoryRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Không tìm thấy thể loại cho id: " + id));
+
+            return categoryMapper.toDto(category);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Transactional
+    @Override
+    public CategoryDTO delete(String id, TokenDTO tokenDTO) {
+        try {
+            Category category = categoryRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Không tìm thấy thể loại cho id: " + id));
+
+            category.setIsDelete(true);
+            category.setLastModifiedDate(LocalDateTime.now());
+            category.setLastModifiedBy(tokenDTO.getFullname());
+
+            return categoryMapper.toDto(categoryRepository.save(category));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
